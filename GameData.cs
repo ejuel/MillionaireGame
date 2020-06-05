@@ -34,10 +34,9 @@ namespace MillionaireGameData
                 answerB = pAnswerB,
                 answerC = pAnswerC,
                 answerD = pAnswerD,
-                correctAnswer = pCorrectAnswer,
                 difficulty = pDifficulty
             });
-            questions[questions.Count].HideAnswer();
+            questions[questions.Count].SetAnswer(pCorrectAnswer);
         }
 
         public void GetRandomGameQuestion(ref int gameQuestion, 
