@@ -14,12 +14,16 @@ namespace MillionaireGame
         {
             //ToDo: Consider putting all this in a navigation object with states
             GameData objGameData = new GameData();
+            
+            // Load default game questions 
+            objGameData.SetDefaultQuestions();
 
             string userInput = System.String.Empty;
 
             while (userInput != "3") {
                 Console.Clear();
                 Console.WriteLine("Who Wants to Be a Millionaire?\n");
+
                 if(objGameData.gamesPlayed > 0){
                     objGameData.GameSummary();
                 }
@@ -33,6 +37,7 @@ namespace MillionaireGame
                     case "2":
                         //ToDo: Setting to add questions
                         Console.WriteLine("Who Wants to Be a Millionaire?\n");
+                        AddQuestion(ref objGameData);
                         break;
                 }
             }
@@ -40,6 +45,7 @@ namespace MillionaireGame
         }
 
         static void playGame(ref GameData pobjGameData){
+            //Currently run from terminal, if using with a GUI then replace Program.cs 
 
             GameFunctions objGameFunctions = new GameFunctions();
             Boolean playGame = true;
@@ -52,7 +58,7 @@ namespace MillionaireGame
 
             while(playGame){
                 
-                objGameFunctions.Countdown(10, ref userInput, GameData.cLifeline, ref intTimeRemaining);
+                //objGameFunctions.Countdown(10, ref userInput, GameData.cLifeline, ref intTimeRemaining);
                 if(userInput.ToUpper() == GameData.cLifeline.ToUpper()){
                     Console.WriteLine("lifeline used");
                     pobjGameData.EndGame();
@@ -70,5 +76,53 @@ namespace MillionaireGame
                 }
             }
         }    
+        static void AddQuestion(ref GameData pobjGameData){
+                        string question = "";
+                        int difficulty = 0;
+                        string answerA = "";
+                        string answerB = "";
+                        string answerC = "";
+                        string answerD = "";
+                        char correctAnswer = ' ';
+                        string postQuestionTrivia = "";
+
+                        bool addQuestion = true;
+                        string userInput = "";
+
+                        while(addQuestion){
+                            while (userInput.Length < 10){
+                                Console.WriteLine("Please enter a question (10 character minimum):"); //ToDo: if storing questi
+                                userInput = Console.ReadLine().ToUpper();
+                                if(userInput[userInput.Length-1] != '?'){
+                                    Console.WriteLine("Your question must end with a questionmark.");
+                                    userInput = "";
+                                }
+                            }
+                            question = userInput;
+
+                            
+                            userInput = "";
+
+                            // ToDo:  ***** Finish adding questions process *****
+
+                            //Enter option A
+                            //Enter option C
+                            //Enter option D
+                            //Enter option E
+                            //Optional: Ask question difficulty (1-100), else 0
+                            //Print Question with answers
+                            //Ask which answer is the correct answer
+                            //Optional: Post question trivia
+
+                            //Populate 
+                            pobjGameData.AddGameQuestion(correctAnswer, answerA, answerB, answerC, answerD, question, difficulty, postQuestionTrivia);
+
+                            Console.WriteLine("Add another question? (y/n)");
+                            userInput = Console.ReadLine().ToUpper();
+                            if(userInput.ToUpper() != "Y" && userInput.ToUpper() != "YES"){
+                                addQuestion = false;
+                            }
+                        }
+        }
     }
 }
