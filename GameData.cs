@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using MillionaireGameQuestions;
+using MillionaireGameSettings;
 
 namespace MillionaireGameData
 {
@@ -11,6 +12,7 @@ namespace MillionaireGameData
         private int gamesWon = 0;
         private decimal moneyWon = 0;
         private List<GameQuestion> questions = new List<GameQuestion>(0) {};
+        public GameSettings settings = new GameSettings();
 
         public void EndGame(bool pWon = false, decimal pMoneyWon = 0){
             //made both parameters optional so in lose scenario can just call EndGame()

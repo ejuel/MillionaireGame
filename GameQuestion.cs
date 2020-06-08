@@ -28,6 +28,5 @@ namespace MillionaireGameQuestions
             }
             return false;
         }
-
     }
 }
