@@ -1,38 +1,51 @@
-using System;
-using System.Collections.Generic;
-
-using MillionaireGameQuestions;
-using MillionaireGameSettings;
+// <copyright file="GameData.cs" company="ejuel.net">
+//     ejuel.net All rights reserved.
+// </copyright>
+// <author>Me</author>
 
 namespace MillionaireGameData
 {
-    public class GameData{
+    using MillionaireGameQuestions;
+    using MillionaireGameSettings;
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// Game Data contains the equivalent of global variables and settings, stores questions too
+    /// </summary>
+    public class GameData
+    {
         public const string cLifeline = "L";
         public int gamesPlayed = 0;
         private int gamesWon = 0;
         private decimal moneyWon = 0;
-        private List<GameQuestion> questions = new List<GameQuestion>(0) {};
+        private readonly List<GameQuestion> questions = new List<GameQuestion>(0) { };
         public GameSettings settings = new GameSettings();
 
-        public void EndGame(bool pWon = false, decimal pMoneyWon = 0){
+        public void EndGame(bool pWon = false, decimal pMoneyWon = 0)
+        {
             //made both parameters optional so in lose scenario can just call EndGame()
             gamesPlayed++;
-            if(pWon){
+            if (pWon)
+            {
                 gamesWon++;
                 moneyWon += pMoneyWon;
             }
         }
-        public void GameSummary(){
+
+        public void GameSummary()
+        {
             Console.WriteLine("You've won {0} of {1} games and walked away with ${2}.", gamesWon, gamesPlayed, moneyWon);
         }
 
-        public void AddGameQuestion(char pCorrectAnswer, 
-                                    string pAnswerA,string pAnswerB, 
-                                    string pAnswerC, string pAnswerD, 
-                                    string pQuestion, 
-                                    int pDifficulty = 0, string pPostQuestionTrivia = ""){
-            
-            questions.Add(new GameQuestion(){
+        public void AddGameQuestion(char pCorrectAnswer,
+                                    string pAnswerA, string pAnswerB,
+                                    string pAnswerC, string pAnswerD,
+                                    string pQuestion,
+                                    int pDifficulty = 0, string pPostQuestionTrivia = "")
+        {
+            questions.Add(new GameQuestion()
+            {
                 question = pQuestion,
                 answerA = pAnswerA,
                 answerB = pAnswerB,
@@ -41,24 +54,30 @@ namespace MillionaireGameData
                 difficulty = pDifficulty,
                 postQuestionTrivia = pPostQuestionTrivia
             });
-            
-            questions[questions.Count-1].SetAnswer(pCorrectAnswer);
+
+            questions[questions.Count - 1].SetAnswer(pCorrectAnswer);
         }
 
-        public void ResetGameQuestions(){
-            foreach (GameQuestion questionEntry in questions){
+        public void ResetGameQuestions()
+        {
+            foreach (GameQuestion questionEntry in questions)
+            {
                 questionEntry.questionAlreadyAsked = false;
             }
         }
 
-        public void GetGameQuestion(ref string pQuestion, 
-                                    ref string pAnswerA, ref string pAnswerB, 
-                                    ref string pAnswerC, ref string pAnswerD, 
-                                    ref int pDifficulty){
+        public void GetGameQuestion(ref string pQuestion,
+                                    ref string pAnswerA, ref string pAnswerB,
+                                    ref string pAnswerC, ref string pAnswerD,
+                                    ref int pDifficulty)
+        {
             int questionCount = questions.Count;
-            if(questionCount > 0){
-                foreach (GameQuestion questionEntry in questions){
-                    if(!questionEntry.questionAlreadyAsked){
+            if (questionCount > 0)
+            {
+                foreach (GameQuestion questionEntry in questions)
+                {
+                    if (!questionEntry.questionAlreadyAsked)
+                    {
                         pQuestion = questionEntry.question;
                         pAnswerA = questionEntry.answerA;
                         pAnswerB = questionEntry.answerB;
@@ -71,14 +90,16 @@ namespace MillionaireGameData
                     }
                 }
             }
-            else{
+            else
+            {
                 Console.WriteLine("ERROR: No game questions exist");
             }
         }
 
-        public void SetDefaultQuestions(){
+        public void SetDefaultQuestions()
+        {
             //Question 1
-            AddGameQuestion('c', "Edward", "Ernest", "Entertainment", "Extra", "What does the “E” in Chuck E. Cheese stand for?",  1);
+            AddGameQuestion('c', "Edward", "Ernest", "Entertainment", "Extra", "What does the “E” in Chuck E. Cheese stand for?", 1);
             //Question 2
             AddGameQuestion('a', "Robot Chicken", "Space Ghost", "The Boondocks", "Samurai Jack", "In the opening of this stop motion Adult Swim show, a mad scientist breathes life into a recently killed creature", 2);
             //Question 3
@@ -107,6 +128,16 @@ namespace MillionaireGameData
             AddGameQuestion('d', "Twitter", "Facebook", "YouTube", "Myspace", "Which social media platform came out in 2003?", 14);
             //Question 15
             AddGameQuestion('b', "Hamlet", "Macbeth", "Romeo & Juliet", "Othello", "What is Shakespeare’s shortest tragedy?", 15);
+
+            //Other Question Examples
+            AddGameQuestion('b', "Wrong", "Right", "Wrong", "Wrong", "Which answer is Right?", 0);
+            AddGameQuestion('d', "Wrong", "Right", "Rite", "Write", "Which word is means to use a pen/pencil and make notes?", 0);
+            AddGameQuestion('a', "Correct", "Right", "Wrong", "Write", "Which answer is Correct?", 0);
+        }
+
+        public int GetNumberOfQuestions()
+        {
+            return questions.Count;
         }
     }
 }

@@ -1,11 +1,15 @@
-using MillionaireGameData;
-using MillionaireGameFunctions;
-using System;
-using System.Collections.Generic;
-using System.Threading;
+// <copyright file="ProgramTerminal.cs" company="ejuel.net">
+//     ejuel.net All rights reserved.
+// </copyright>
+// <author>Me</author>
 
 namespace MillionaireTerminal
 {
+    using MillionaireGameData;
+    using MillionaireGameFunctions;
+    using System;
+    using System.Collections.Generic;
+
     internal class ProgramTerminal
     {
         public void TerminalMain()
@@ -14,22 +18,18 @@ namespace MillionaireTerminal
 
             GameData objGameData = new GameData();
 
-            // Load default game questions 
-            objGameData.SetDefaultQuestions();
-
             string userInput = string.Empty;
 
-            while (userInput != "3")
+            while (userInput.ToUpper() != "x".ToUpper())
             {
                 Console.Clear();
-                
                 Console.WriteLine("Who Wants to Be a Millionaire?\n");
 
                 if (objGameData.gamesPlayed > 0)
                 {
                     objGameData.GameSummary();
                 }
-                Console.WriteLine("Here are your choices: \n1. Start New Game\n2. Add Question\n3. Exit");
+                Console.WriteLine("Here are your choices: \n1. Start New Game\n2. Add Question\n3. Load default questions\nx. Exit");
                 userInput = Console.ReadLine();
 
                 switch (userInput)
@@ -37,10 +37,25 @@ namespace MillionaireTerminal
                     case "1":
                         playGame(ref objGameData);
                         break;
+
                     case "2":
                         //ToDo: Setting to add questions
                         Console.WriteLine("Who Wants to Be a Millionaire?\n");
                         AddQuestion(ref objGameData);
+                        break;
+
+                    case "3":
+                        if (objGameData.GetNumberOfQuestions() == 0)
+                        {
+                            // Load default game questions
+                            objGameData.SetDefaultQuestions();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Default questions have already been loaded.\nPress any key to continue...");
+                            Console.ReadKey();
+                        }
+
                         break;
                 }
             }
@@ -61,8 +76,17 @@ namespace MillionaireTerminal
 
             while (playGame)
             {
+                string question = "";
+                string answerA = "";
+                string answerB = "";
+                string answerC = "";
+                string answerD = "";
+                int difficulty = 0;
 
-                //objGameFunctions.Countdown(10, ref userInput, GameData.cLifeline, ref intTimeRemaining);
+                pobjGameData.GetGameQuestion(ref question, ref answerA, ref answerB, ref answerC, ref answerD, ref difficulty);
+                objGameFunctions.PrintQuestion(ref pobjGameData, question, answerA, answerB, answerC, answerD);
+
+                objGameFunctions.Countdown(10, ref userInput, GameData.cLifeline, ref intTimeRemaining);
                 if (userInput.ToUpper() == GameData.cLifeline.ToUpper())
                 {
                     Console.WriteLine("lifeline used");
@@ -122,7 +146,6 @@ namespace MillionaireTerminal
                 List<char> answerOptions = new List<char> { 'A', 'B', 'C', 'D' };
                 foreach (char option in answerOptions)
                 {
-
                     while (userInput.Length < pobjGameData.settings.minAnswerLength || userInput.Length > pobjGameData.settings.maxAnswerLength)
                     {
                         Console.WriteLine("Please enter option {0}: ", option);
@@ -138,12 +161,15 @@ namespace MillionaireTerminal
                         case 'A':
                             answerA = userInput;
                             break;
+
                         case 'B':
                             answerB = userInput;
                             break;
+
                         case 'C':
                             answerC = userInput;
                             break;
+
                         case 'D':
                             answerD = userInput;
                             break;
@@ -153,14 +179,13 @@ namespace MillionaireTerminal
 
                 // ToDo:  ***** Finish adding questions process *****
 
-
                 //Print Question with answers
                 //Ask which answer is the correct answer
 
                 //Optional: Ask question difficulty (1-100), else 0
                 //Optional: Post question trivia
 
-                //Populate 
+                //Populate
                 pobjGameData.AddGameQuestion(correctAnswer, answerA, answerB, answerC, answerD, question, difficulty, postQuestionTrivia);
 
                 Console.WriteLine("Add another question? (y/n)");
