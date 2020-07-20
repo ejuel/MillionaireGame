@@ -9,6 +9,7 @@ namespace MillionaireTerminal
     using MillionaireGameFunctions;
     using System;
     using System.Collections.Generic;
+    using MillionaireSms;
 
     internal class ProgramTerminal
     {
@@ -55,7 +56,11 @@ namespace MillionaireTerminal
                             Console.WriteLine("Default questions have already been loaded.\nPress any key to continue...");
                             Console.ReadKey();
                         }
+                        break;
 
+                    case "4":
+                        ProgramSms objSms = new ProgramSms();
+                        objSms.PublicReadAllSms();
                         break;
                 }
             }

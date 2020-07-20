@@ -6,6 +6,7 @@
 namespace Millionaire
 {
     using MillionaireTerminal;
+    using MillionaireSms;
     using System;
 
     internal class Program
@@ -16,7 +17,8 @@ namespace Millionaire
             int status = 0;
             //objSms.PublicSendSms(ref status, "2029461187", "4253459249", "test message");
             objSms.PublicReadSms();
-            objSms.PublicTestSms();
+            //objSms.PublicTestSms();
+            objSms.PublicReadAllSms();
             Console.WriteLine("waiting");
             Console.ReadKey();
             if (status != 0)

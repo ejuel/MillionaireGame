@@ -1,4 +1,4 @@
-﻿namespace Millionaire
+﻿namespace SmsSignalWire
 {
     using SignalWire.Relay;
     using SignalWire.Relay.Messaging;
@@ -13,7 +13,7 @@
     {
         //Resources: https://docs.signalwire.com/topics/relay-sdk-dotnet/v2/#relay-sdk-for-net-using-the-sdk-relay-consumer
 
-        //ToDo: Receive SMS messages
+        //ToDo: Receive SMS messages (.Net on right of page): https://docs.signalwire.com/topics/laml-api/?csharp#api-reference-messages-list-all-messages
 
         internal class IncomingMessageConsumer : Consumer
         {
@@ -57,6 +57,31 @@
             SendTestSms().Wait();
         }
 
+        public void RetrieveAllSms(){
+            string projectId = Environment.GetEnvironmentVariable("SIGNALWIRE_PROJECT_ID");
+            string authToken = Environment.GetEnvironmentVariable("SIGNALWIRE_AUTH_TOKEN");
+            string signalwireSpaceUrl = Environment.GetEnvironmentVariable("SIGNALWIRE_DOMAIN");
+            
+            if (projectId is null || authToken is null || signalwireSpaceUrl is null)
+            {
+                Console.WriteLine("SignalWire: Environment Variables are missing");
+            }
+
+            TwilioClient.Init(projectId, authToken, new Dictionary<string, object> { ["signalwireSpaceUrl"] = signalwireSpaceUrl });
+
+            var messages = MessageResource.Read();
+
+            foreach(var record in messages)
+            {
+                if(record.DateCreated > DateTime.Now.AddDays(-1)){
+                    PrintSmsDetails(record);
+                }
+                else{
+                    //Console.WriteLine("DateSent: "+ record.DateSent + "Direction: " + record.Direction + " Body: "+ record.Body);
+                }
+            }
+        }
+
         private static async Task SendTestSms()
         {
             // Find your Account Sid and Token at twilio.com/console
@@ -98,6 +123,25 @@
             );
 
             Console.WriteLine(message.Sid);
+        }
+
+        public static void PrintSmsDetails(MessageResource pMessage){
+            Console.WriteLine("######################");
+            Console.WriteLine("{0,16}: {1}","SID", pMessage.AccountSid);
+            Console.WriteLine("{0,16}: {1}","From", pMessage.From);
+            Console.WriteLine("{0,16}: {1}","To", pMessage.To);
+            Console.WriteLine("{0,16}: {1}","Direction", pMessage.Direction);
+            Console.WriteLine("{0,16}: {1}","Date Created", pMessage.DateCreated);
+            Console.WriteLine("{0,16}: {1}","Date Sent", pMessage.DateSent);
+            Console.WriteLine("{0,16}: {1}","Date Updated", pMessage.DateUpdated);
+            Console.WriteLine("{0,16}: {1}","Body", pMessage.Body);
+            if(pMessage.ErrorCode != null || pMessage.ErrorMessage != null){
+                Console.WriteLine("/////////Error/////////");
+                Console.WriteLine("{0,16}: {1}","Error Code", pMessage.ErrorCode);
+                Console.WriteLine("{0,16}: {1}","Date Message", pMessage.ErrorMessage);
+                Console.WriteLine("/////////Error/////////");
+            }
+            Console.WriteLine("{0,16}: ${1}","Price", pMessage.Price);
         }
     }
 }

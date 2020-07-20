@@ -3,10 +3,11 @@
 // </copyright>
 // <author>Zeke</author>
 
-namespace Millionaire
+namespace MillionaireSms
 {
     using System;
     using System.Linq;
+    using SmsSignalWire;
     internal class ProgramSms
     {
         private readonly int errorFrom = -1;
@@ -20,6 +21,13 @@ namespace Millionaire
             objSignalWire.testSms();
             Console.ReadKey();
         }
+
+        public void PublicReadAllSms(){
+            smsSignalWire objSignalWire = new smsSignalWire();
+            objSignalWire.RetrieveAllSms();
+            Console.ReadKey();
+        }
+
         public void PublicSendSms(ref int pStatus, string pFrom, string pTo, string pBodyText)
         {
             if (pFrom.Length != 10 || !pFrom.All(char.IsDigit))
@@ -50,7 +58,6 @@ namespace Millionaire
         public void PublicReadSms()
         {
             smsSignalWire.SignalWireIncoming objSignalWire = new smsSignalWire.SignalWireIncoming();
-
         }
 
 
