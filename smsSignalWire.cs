@@ -21,7 +21,9 @@
             {
                 Project = Environment.GetEnvironmentVariable("SIGNALWIRE_PROJECT_ID");
                 Token = Environment.GetEnvironmentVariable("SIGNALWIRE_AUTH_TOKEN");
-                Contexts = new List<string> { "test" };
+                //Configure Context in signalwire.com -> Phone Numbers -> Message Settings -> 
+                // "WHEN A MESSAGE COMES IN, FORWARD MESSAGE TO THIS RELAY CONTEXT:"
+                Contexts = new List<string> { "test", Environment.GetEnvironmentVariable("SIGNALWIRE_CONTEXT") };
             }
 
             protected override void OnIncomingMessage(Message message)
@@ -58,9 +60,13 @@
         }
 
         public void RetrieveAllSms(){
+            
             string projectId = Environment.GetEnvironmentVariable("SIGNALWIRE_PROJECT_ID");
             string authToken = Environment.GetEnvironmentVariable("SIGNALWIRE_AUTH_TOKEN");
             string signalwireSpaceUrl = Environment.GetEnvironmentVariable("SIGNALWIRE_DOMAIN");
+
+            //Read new messages as they come 
+            //new IncomingMessageConsumer().Run();
             
             if (projectId is null || authToken is null || signalwireSpaceUrl is null)
             {
@@ -69,15 +75,15 @@
 
             TwilioClient.Init(projectId, authToken, new Dictionary<string, object> { ["signalwireSpaceUrl"] = signalwireSpaceUrl });
 
-            var messages = MessageResource.Read();
+            var messages = MessageResource.Read(limit: 50);
 
             foreach(var record in messages)
             {
-                if(record.DateCreated > DateTime.Now.AddDays(-1)){
-                    PrintSmsDetails(record);
+                if(record.DateSent > DateTime.Now.AddDays(-1)){
+                   PrintSmsDetails(record);
                 }
                 else{
-                    //Console.WriteLine("DateSent: "+ record.DateSent + "Direction: " + record.Direction + " Body: "+ record.Body);
+                    Console.WriteLine("###Old message to {0} DateSent: {1}" , record.To, record.DateSent);
                 }
             }
         }

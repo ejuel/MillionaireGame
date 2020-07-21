@@ -60,7 +60,7 @@ namespace MillionaireTerminal
 
                     case "4":
                         ProgramSms objSms = new ProgramSms();
-                        objSms.PublicReadAllSms();
+                        objSms.PublicRetrieveAllSms();
                         break;
                 }
             }

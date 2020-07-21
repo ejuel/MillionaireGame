@@ -18,7 +18,8 @@ namespace Millionaire
             //objSms.PublicSendSms(ref status, "2029461187", "4253459249", "test message");
             objSms.PublicReadSms();
             //objSms.PublicTestSms();
-            objSms.PublicReadAllSms();
+            objSms.PublicRetrieveAllSms();
+            
             Console.WriteLine("waiting");
             Console.ReadKey();
             if (status != 0)

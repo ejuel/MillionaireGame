@@ -22,7 +22,7 @@ namespace MillionaireSms
             Console.ReadKey();
         }
 
-        public void PublicReadAllSms(){
+        public void PublicRetrieveAllSms(){
             smsSignalWire objSignalWire = new smsSignalWire();
             objSignalWire.RetrieveAllSms();
             Console.ReadKey();
